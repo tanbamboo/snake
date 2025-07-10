@@ -352,21 +352,7 @@ function determineFoodType() {
     }
 }
 
-// 修改检查食物函数
-function checkFood() {
-    const head = snake[0];
-    
-    if (head.x === food.x && head.y === food.y) {
-        // 根据食物类型应用效果
-        applyFoodEffect();
-        
-        // 生成新食物
-        generateFood();
-        
-        // 更新分数
-        updateScore();
-    }
-}
+
 
 // 应用食物效果
 function applyFoodEffect() {
@@ -380,6 +366,12 @@ function applyFoodEffect() {
     if (effectDisplayInterval) {
         clearInterval(effectDisplayInterval);
         effectDisplayInterval = null;
+    }
+    
+    // 清除特殊食物计时器
+    if (specialFoodTimer) {
+        clearTimeout(specialFoodTimer);
+        specialFoodTimer = null;
     }
     
     // 重置特殊效果
@@ -397,7 +389,10 @@ function applyFoodEffect() {
             // 星星：加速
             activeEffect = 'speed';
             effectTimeLeft = 10;
-            originalGameSpeed = gameSpeed;
+            // 只有在没有其他效果时才保存原始速度
+            if (!originalGameSpeed) {
+                originalGameSpeed = gameSpeed;
+            }
             gameSpeed = Math.floor(gameSpeed * 0.7); // 速度提升30%
             
             // 重新设置游戏循环
@@ -442,7 +437,10 @@ function applyFoodEffect() {
             // 减速器：减速
             activeEffect = 'slow';
             effectTimeLeft = 12;
-            originalGameSpeed = gameSpeed;
+            // 只有在没有其他效果时才保存原始速度
+            if (!originalGameSpeed) {
+                originalGameSpeed = gameSpeed;
+            }
             gameSpeed = Math.floor(gameSpeed * 1.2); // 速度降低20%
             
             // 重新设置游戏循环
